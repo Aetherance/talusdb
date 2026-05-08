@@ -15,7 +15,7 @@ namespace {
 typedef Iterator* (*BlockFunction)(void*, const ReadOptions&, const Slice&);
 
 class TwoLevelIterator : public Iterator {
- public:
+public:
   TwoLevelIterator(Iterator* index_iter, BlockFunction block_function, void* arg,
                    const ReadOptions& options);
 
@@ -27,7 +27,9 @@ class TwoLevelIterator : public Iterator {
   void Next() override;
   void Prev() override;
 
-  bool Valid() const override { return data_iter_ != nullptr && data_iter_->Valid(); }
+  bool Valid() const override {
+    return data_iter_ != nullptr && data_iter_->Valid();
+  }
   Slice Key() const override {
     assert(Valid());
     return data_iter_->Key();
@@ -46,7 +48,7 @@ class TwoLevelIterator : public Iterator {
     }
   }
 
- private:
+private:
   void SaveError(const Status& s) {
     if (status_.Ok() && !s.Ok()) status_ = s;
   }

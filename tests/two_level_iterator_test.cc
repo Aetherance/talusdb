@@ -18,15 +18,19 @@ namespace {
 using Entry = std::pair<std::string, std::string>;
 
 class FakeIterator : public Iterator {
- public:
+public:
   FakeIterator() = default;
 
   explicit FakeIterator(std::vector<Entry> entries)
       : entries_(std::move(entries)), index_(entries_.size()) {}
 
-  void SetError(const Status& s) { error_ = s; }
+  void SetError(const Status& s) {
+    error_ = s;
+  }
 
-  bool Valid() const override { return index_ < entries_.size(); }
+  bool Valid() const override {
+    return index_ < entries_.size();
+  }
 
   void SeekToFirst() override {
     if (!error_.Ok()) return;
@@ -74,9 +78,11 @@ class FakeIterator : public Iterator {
     return entries_[index_].second;
   }
 
-  Status GetStatus() const override { return error_; }
+  Status GetStatus() const override {
+    return error_;
+  }
 
- private:
+private:
   std::vector<Entry> entries_;
   size_t index_;
   Status error_;
@@ -98,14 +104,12 @@ Iterator* TestBlockFunction(void* arg, const ReadOptions& options, const Slice& 
   return new FakeIterator();
 }
 
-Iterator* BuildTwoLevelIterator(BlockFunctionContext* ctx,
-                                std::vector<Entry> index_entries) {
+Iterator* BuildTwoLevelIterator(BlockFunctionContext* ctx, std::vector<Entry> index_entries) {
   auto* index_iter = new FakeIterator(std::move(index_entries));
   return NewTwoLevelIterator(index_iter, &TestBlockFunction, ctx, ReadOptions());
 }
 
-std::vector<Entry> MakeIndexEntries(
-    const std::vector<std::vector<Entry>>& blocks) {
+std::vector<Entry> MakeIndexEntries(const std::vector<std::vector<Entry>>& blocks) {
   std::vector<Entry> result;
   for (const auto& block : blocks) {
     if (!block.empty()) {
@@ -246,11 +250,7 @@ TEST(TwoLevelIteratorTest, SeekAfterLast) {
 
 TEST(TwoLevelIteratorTest, SkipEmptyBlocksForward) {
   std::vector<std::vector<Entry>> blocks = {
-      {{"a", "1"}},
-      {},
-      {{"c", "3"}},
-      {},
-      {{"e", "5"}},
+      {{"a", "1"}}, {}, {{"c", "3"}}, {}, {{"e", "5"}},
   };
   BlockFunctionContext ctx;
   ctx.blocks = blocks;
@@ -278,11 +278,7 @@ TEST(TwoLevelIteratorTest, SkipEmptyBlocksForward) {
 
 TEST(TwoLevelIteratorTest, SkipEmptyBlocksBackward) {
   std::vector<std::vector<Entry>> blocks = {
-      {{"a", "1"}},
-      {},
-      {{"c", "3"}},
-      {},
-      {{"e", "5"}},
+      {{"a", "1"}}, {}, {{"c", "3"}}, {}, {{"e", "5"}},
   };
   BlockFunctionContext ctx;
   ctx.blocks = blocks;
