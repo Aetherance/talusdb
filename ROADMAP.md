@@ -20,10 +20,8 @@
 - [x] Mutex / CondVar / Snappy / Zstd / CRC32C stubs (`include/port.h`)
 
 ## Phase 2 — Foundation Utilities
-- [ ] `include/db_constants.h` — LSM config constants (kNumLevels=7, compaction triggers)
 - [ ] `include/cache.h` + `src/util/cache.cc` — sharded LRU cache (for block cache + table cache)
-- [ ] `src/db/filename.h/cc` — DB file naming (CURRENT, MANIFEST-*, *.ldb, *.log, LOCK)
-- [ ] `src/table/iterator_wrapper.h` — RAII iterator wrapper
+- [x] `src/db/filename.h/cc` — DB file naming (CURRENT, MANIFEST-*, *.ldb, *.log, LOCK)
 
 ## Phase 3 — Write-Ahead Log
 - [ ] `src/db/log_format.h` — record types (kFull/kFirst/kMiddle/kLast), block size 32KB
