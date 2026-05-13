@@ -20,7 +20,7 @@
 - [x] Mutex / CondVar / Snappy / Zstd / CRC32C stubs (`include/port.h`)
 
 ## Phase 2 — Foundation Utilities
-- [ ] `include/cache.h` + `src/util/cache.cc` — sharded LRU cache (for block cache + table cache)
+- [x] `include/cache.h` + `src/util/cache.cc` — sharded LRU cache (for block cache + table cache)
 - [x] `src/db/filename.h/cc` — DB file naming (CURRENT, MANIFEST-*, *.ldb, *.log, LOCK)
 
 ## Phase 3 — Write-Ahead Log
