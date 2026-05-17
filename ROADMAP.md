@@ -25,7 +25,7 @@
 
 ## Phase 3 — Write-Ahead Log
 - [x] `src/db/log_format.h` — record types (kFull/kFirst/kMiddle/kLast), block size 32KB
-- [ ] `src/db/log_writer.h/cc` — append records to WAL file, CRC per record
+- [x] `src/db/log_writer.h/cc` — append records to WAL file, CRC per record
 - [ ] `src/db/log_reader.h/cc` — read records from WAL, skip to initial block, CRC verify
 
 ## Phase 4 — Version Management
