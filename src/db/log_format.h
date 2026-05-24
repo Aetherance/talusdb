@@ -1,3 +1,5 @@
+#pragma once
+
 namespace db {
 namespace log {
 
