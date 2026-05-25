@@ -29,7 +29,7 @@
 - [x] `src/db/log_reader.h/cc` — read records from WAL, skip to initial block, CRC verify
 
 ## Phase 4 — Version Management
-- [ ] `include/write_batch.h` + `src/db/write_batch.cc` — atomic batch write
+- [x] `include/write_batch.h` + `src/db/write_batch.cc` — atomic batch write
 - [ ] `src/db/snapshot.h` — MVCC snapshot list (doubly-linked list, ~80 lines)
 - [ ] `src/db/version_edit.h/cc` — delta encoding (MANIFEST record serialize/deserialize)
 - [ ] `src/table/merger.h/cc` — merge N sorted iterators (min-heap)

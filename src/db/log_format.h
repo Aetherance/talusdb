@@ -20,3 +20,9 @@ static const int kHeaderSize = 4 + 2 + 1;
 
 }  // namespace log
 }  // namespace db
+
+//  WAL block (32KB):
+//  ┌─ record header (7B) ─┬─ record payload (rep_) ─────────────────┐
+//  │ CRC(4B) | len(2B)    │ [seq:8B] [count:4B] [rec0] [rec1] ...   │
+//  │ type(1B)             │                                         │
+//  └──────────────────────┴─────────────────────────────────────────┘
