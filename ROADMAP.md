@@ -33,7 +33,7 @@
 - [x] `src/db/snapshot.h` — MVCC snapshot list (doubly-linked list, ~80 lines)
 - [x] `src/db/version_edit.h/cc` — delta encoding (MANIFEST record serialize/deserialize)
 - [ ] `src/table/merger.h/cc` — merge N sorted iterators (min-heap)
-- [ ] `src/db/table_cache.h/cc` — LRU cache of open SSTable readers
+- [x] `src/db/table_cache.h/cc` — LRU cache of open SSTable readers
 - [ ] `src/db/version_set.h/cc` — version tree, compaction picking, MANIFEST I/O
 
 ## Phase 5 — Read Path
