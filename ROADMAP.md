@@ -31,7 +31,7 @@
 ## Phase 4 — Version Management
 - [x] `include/write_batch.h` + `src/db/write_batch.cc` — atomic batch write
 - [x] `src/db/snapshot.h` — MVCC snapshot list (doubly-linked list, ~80 lines)
-- [ ] `src/db/version_edit.h/cc` — delta encoding (MANIFEST record serialize/deserialize)
+- [x] `src/db/version_edit.h/cc` — delta encoding (MANIFEST record serialize/deserialize)
 - [ ] `src/table/merger.h/cc` — merge N sorted iterators (min-heap)
 - [ ] `src/db/table_cache.h/cc` — LRU cache of open SSTable readers
 - [ ] `src/db/version_set.h/cc` — version tree, compaction picking, MANIFEST I/O
