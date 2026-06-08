@@ -47,6 +47,10 @@ public:
     return code_ == Code::kOk;
   }
 
+  bool IsNotFound() const {
+    return Code() == Code::kNotFound;
+  }
+
   Code GetCode() const {
     return code_;
   }

@@ -34,7 +34,7 @@
 - [x] `src/db/version_edit.h/cc` — delta encoding (MANIFEST record serialize/deserialize)
 - [x] `src/table/merger.h/cc` — merge N sorted iterators (min-heap)
 - [x] `src/db/table_cache.h/cc` — LRU cache of open SSTable readers
-- [ ] `src/db/version_set.h/cc` — version tree, compaction picking, MANIFEST I/O
+- [x] `src/db/version_set.h/cc` — version tree, compaction picking, MANIFEST I/O
 
 ## Phase 5 — Read Path
 - [ ] `include/db.h` — public DB interface (Open / Get / Put / Delete / Write / NewIterator / GetSnapshot / ReleaseSnapshot / CompactRange / DestroyDB / RepairDB / GetProperty / GetApproximateSizes)
