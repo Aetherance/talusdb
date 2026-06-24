@@ -589,7 +589,26 @@ public:
              base_iter != bpos; ++base_iter) {
           MaybeAddFile(v, level, *base_iter);
         }
+        MaybeAddFile(v, level, added_file);
       }
+
+      for (; base_iter != base_end; ++base_iter) {
+        MaybeAddFile(v, level, *base_iter);
+      }
+
+#ifndef NDEBUG
+      if (level > 0) {
+        for (size_t i = 1; i < v->files_[level].size(); i++) {
+          const InternalKey& prev_end = v->files_[level][i - 1]->largest;
+          const InternalKey& this_begin = v->files_[level][i]->smallest;
+          if (vset_->icmp_.Compare(prev_end, this_begin) >= 0) {
+            std::fprintf(stderr, "overlapping ranges in same level %s vs. %s\n",
+                         prev_end.DebugString().c_str(), this_begin.DebugString().c_str());
+            std::abort();
+          }
+        }
+      }
+#endif
     }
   }
 
@@ -721,6 +740,7 @@ Status VersionSet::LogAndApply(VersionEdit* edit, port::Mutex* mu) {
       env_->RemoveFile(new_manifest_file);
     }
   }
+  return s;
 }
 
 Status VersionSet::Recover(bool* save_manifest) {
@@ -923,7 +943,7 @@ Status VersionSet::WriteSnapshot(log::Writer* log) {
     const std::vector<FileMetaData*>& files = current_->files_[level];
     for (size_t i = 0; i < files.size(); i++) {
       const FileMetaData* f = files[i];
-      edit.AddFile(level, f->file_size, f->file_size, f->smallest, f->largest);
+      edit.AddFile(level, f->number, f->file_size, f->smallest, f->largest);
     }
   }
 
@@ -989,6 +1009,22 @@ int64_t VersionSet::NumLevelBytes(int level) const {
   assert(level >= 0);
   assert(level < config::kNumLevels);
   return TotalFileSize(current_->files_[level]);
+}
+
+int64_t VersionSet::MaxNextLevelOverlappingBytes() {
+  int64_t result = 0;
+  std::vector<FileMetaData*> overlaps;
+  for (int level = 1; level < config::kNumLevels - 1; level++) {
+    for (size_t i = 0; i < current_->files_[level].size(); i++) {
+      const FileMetaData* f = current_->files_[level][i];
+      current_->GetOverlappingInputs(level + 1, &f->smallest, &f->largest, &overlaps);
+      const int64_t sum = TotalFileSize(overlaps);
+      if (sum > result) {
+        result = sum;
+      }
+    }
+  }
+  return result;
 }
 
 void VersionSet::GetRange(const std::vector<FileMetaData*>& inputs, InternalKey* smallest,
