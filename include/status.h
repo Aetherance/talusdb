@@ -48,7 +48,7 @@ public:
   }
 
   bool IsNotFound() const {
-    return Code() == Code::kNotFound;
+    return code_ == Code::kNotFound;
   }
 
   Code GetCode() const {

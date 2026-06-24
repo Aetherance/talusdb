@@ -12,6 +12,7 @@ TEST(StatusTest, FactoryMethodsExposeCodesMessagesAndStrings) {
 
   const Status not_found = Status::NotFound("missing", "file");
   EXPECT_EQ(Status::Code::kNotFound, not_found.GetCode());
+  EXPECT_TRUE(not_found.IsNotFound());
   EXPECT_EQ("missing: file", not_found.Message());
   EXPECT_EQ("NotFound: missing: file", not_found.ToString());
 
