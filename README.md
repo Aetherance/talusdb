@@ -27,6 +27,21 @@ make build
 make test
 ```
 
+## Benchmark
+
+The `db_bench` target is a TalusDB port of LevelDB's database benchmark. If LevelDB is checked
+out at `../leveldb`, the following command builds both Release binaries and runs the same
+workload against LevelDB first and TalusDB second:
+
+```bash
+make benchmark
+```
+
+Override `BENCHMARK_ARGS`, `LEVELDB_DIR`, `LEVELDB_BUILD_DIR`, `LEVELDB_BENCHMARK_DB`, or
+`TALUSDB_BENCHMARK_DB` on the `make` command line when needed. Write benchmarks recreate their
+separate database directories. Use paths on the same real filesystem instead of `/tmp` when
+measuring storage performance.
+
 ## Directory Structure
 
 ```
@@ -36,4 +51,5 @@ src/
   table/      Block, SSTable, TableBuilder, Filter, Iterator
   util/       Comparator, Coding, CRC32C, Arena, Env, Bloom
 tests/        Unit tests
+benchmarks/   Performance benchmarks
 ```

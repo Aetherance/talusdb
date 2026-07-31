@@ -16,10 +16,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(DB_WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
+option(DB_BUILD_BENCHMARKS "Build TalusDB benchmarks" ON)
 
 set(DB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
 set(DB_SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
 set(DB_TEST_DIR "${PROJECT_SOURCE_DIR}/tests")
+set(DB_BENCHMARK_DIR "${PROJECT_SOURCE_DIR}/benchmarks")
 
 function(db_enable_warnings target_name)
   if(MSVC)
@@ -112,6 +114,13 @@ if(BUILD_TESTING AND TARGET db)
     db_enable_warnings("${test_name}")
     gtest_discover_tests("${test_name}")
   endforeach()
+endif()
+
+if(DB_BUILD_BENCHMARKS AND TARGET db)
+  add_executable(db_bench "${DB_BENCHMARK_DIR}/db_bench.cc")
+  target_link_libraries(db_bench PRIVATE db)
+  target_compile_features(db_bench PRIVATE cxx_std_20)
+  db_enable_warnings(db_bench)
 endif()
 
 find_program(DB_MAKE_BIN NAMES make gmake)

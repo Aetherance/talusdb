@@ -142,8 +142,9 @@ Status PosixError(const std::string& context, int error_number) {
 class Limiter {
 public:
   explicit Limiter(int max_acquires)
+      :
 #if !defined(NDEBUG)
-      : max_acquires_(max_acquires),
+        max_acquires_(max_acquires),
 #endif
         acquires_allowed_(max_acquires) {
   }

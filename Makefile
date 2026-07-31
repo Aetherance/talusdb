@@ -1,11 +1,18 @@
 SHELL := bash
 
-.PHONY: help configure build test ci-test fmt fmt-check check
+LEVELDB_DIR ?= ../leveldb
+LEVELDB_BUILD_DIR ?= build-release/leveldb
+BENCHMARK_ARGS ?= --benchmarks=fillseq,readseq,readrandom,stats --num=100000 --reads=100000 --compression=0
+LEVELDB_BENCHMARK_DB ?= /tmp/leveldb-benchmark
+TALUSDB_BENCHMARK_DB ?= /tmp/talusdb-benchmark
+
+.PHONY: help configure build benchmark test ci-test fmt fmt-check check
 
 help:
 	@echo "Available targets:"
 	@echo "  make configure  - Configure CMake with the dev preset"
 	@echo "  make build      - Build with the dev preset"
+	@echo "  make benchmark  - Compare LevelDB and TalusDB in Release mode"
 	@echo "  make test       - Run gtest binaries directly"
 	@echo "  make ci-test    - Run tests via CTest with the dev preset"
 	@echo "  make fmt        - Format C/C++ sources with clang-format"
@@ -19,6 +26,27 @@ configure:
 
 build: configure
 	cmake --build --preset dev
+
+benchmark:
+	@test -f "$(LEVELDB_DIR)/CMakeLists.txt" || { \
+		echo "LevelDB not found at $(LEVELDB_DIR); set LEVELDB_DIR=/path/to/leveldb" >&2; \
+		exit 1; \
+	}
+	cmake -S "$(LEVELDB_DIR)" -B "$(LEVELDB_BUILD_DIR)" \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DLEVELDB_BUILD_BENCHMARKS=ON \
+		-DLEVELDB_BUILD_TESTS=OFF
+	cmake --build "$(LEVELDB_BUILD_DIR)" --target db_bench --parallel
+	cmake -S . -B build-release \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DDB_BUILD_BENCHMARKS=ON \
+		-DBUILD_TESTING=OFF
+	cmake --build build-release --target db_bench --parallel
+	@printf '\n\n==> LevelDB (baseline)\n\n'
+	"$(LEVELDB_BUILD_DIR)/db_bench" $(BENCHMARK_ARGS) --db="$(LEVELDB_BENCHMARK_DB)"
+	@printf '\n\n==> TalusDB\n\n'
+	./build-release/db_bench $(BENCHMARK_ARGS) --db="$(TALUSDB_BENCHMARK_DB)"
+	@printf '\n\n'
 
 test: build
 	@set -euo pipefail; \
