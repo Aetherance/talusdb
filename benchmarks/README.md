@@ -29,13 +29,14 @@ LevelDB followed by TalusDB:
 make benchmark
 ```
 
-The default comparison uses 100,000 operations, separate database directories, and disables
-compression on both implementations because TalusDB does not currently enable Snappy. It can be
-customized without editing the Makefile:
+The default comparison runs `fillseq`, `fillrandom`, `readseq`, and `readrandom` with 100,000
+operations, uses separate database directories, and disables compression on both implementations
+because TalusDB does not currently enable Snappy. It can be customized without editing the
+Makefile:
 
 ```bash
 make benchmark \
-  BENCHMARK_ARGS='--benchmarks=fillseq,readrandom,stats --num=1000000 --reads=1000000' \
+  BENCHMARK_ARGS='--benchmarks=fillseq,fillrandom,readrandom,stats --num=1000000 --reads=1000000' \
   LEVELDB_BENCHMARK_DB=/path/on/disk/leveldb-benchmark \
   TALUSDB_BENCHMARK_DB=/path/on/disk/talusdb-benchmark
 ```

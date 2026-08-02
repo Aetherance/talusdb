@@ -31,7 +31,8 @@ make test
 
 The `db_bench` target is a TalusDB port of LevelDB's database benchmark. If LevelDB is checked
 out at `../leveldb`, the following command builds both Release binaries and runs the same
-workload against LevelDB first and TalusDB second:
+sequential-write, random-write, sequential-read, and random-read workload against LevelDB first
+and TalusDB second:
 
 ```bash
 make benchmark

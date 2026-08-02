@@ -2,7 +2,7 @@ SHELL := bash
 
 LEVELDB_DIR ?= ../leveldb
 LEVELDB_BUILD_DIR ?= build-release/leveldb
-BENCHMARK_ARGS ?= --benchmarks=fillseq,readseq,readrandom,stats --num=100000 --reads=100000 --compression=0
+BENCHMARK_ARGS ?= --benchmarks=fillseq,fillrandom,readseq,readrandom,stats --num=100000 --reads=100000 --compression=0
 LEVELDB_BENCHMARK_DB ?= /tmp/leveldb-benchmark
 TALUSDB_BENCHMARK_DB ?= /tmp/talusdb-benchmark
 
