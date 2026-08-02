@@ -17,6 +17,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(DB_WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
 option(DB_BUILD_BENCHMARKS "Build TalusDB benchmarks" ON)
+option(DB_USE_CRC32C "Use google/crc32c when available" ON)
 
 set(DB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
 set(DB_SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
@@ -75,6 +76,21 @@ if(DB_LIBRARY_SOURCES)
   )
   target_compile_features(db PUBLIC cxx_std_20)
   db_enable_warnings(db)
+
+  if(DB_USE_CRC32C)
+    find_package(crc32c QUIET)
+    if(NOT crc32c_FOUND)
+      find_package(Crc32c QUIET)
+    endif()
+
+    if(TARGET crc32c::crc32c)
+      target_link_libraries(db PUBLIC crc32c::crc32c)
+      target_compile_definitions(db PUBLIC HAVE_CRC32C=1)
+    elseif(TARGET Crc32c::crc32c)
+      target_link_libraries(db PUBLIC Crc32c::crc32c)
+      target_compile_definitions(db PUBLIC HAVE_CRC32C=1)
+    endif()
+  endif()
 
   if(DB_PUBLIC_HEADERS)
     target_sources(

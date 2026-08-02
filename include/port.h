@@ -13,9 +13,6 @@
 #define HAVE_ZSTD 0
 #endif
 
-#if HAVE_CRC32C
-#include <crc32c/crc32c.h>
-#endif  // HAVE_CRC32C
 #if HAVE_SNAPPY
 #include <snappy.h>
 #endif  // HAVE_SNAPPY
@@ -241,17 +238,6 @@ inline bool GetHeapProfile(void (*func)(void*, const char*, int), void* arg) {
   (void)func;
   (void)arg;
   return false;
-}
-
-inline uint32_t AcceleratedCRC32C(uint32_t crc, const char* buf, size_t size) {
-#if HAVE_CRC32C
-  return ::crc32c::Extend(crc, reinterpret_cast<const uint8_t*>(buf), size);
-#else
-  (void)crc;
-  (void)buf;
-  (void)size;
-  return 0;
-#endif  // HAVE_CRC32C
 }
 
 }  // namespace port
